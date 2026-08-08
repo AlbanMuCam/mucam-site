@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MuCam — Ressources de la presqu'île</title>
+<link rel="preload" href="/assets/fonts/Brito-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/Brito-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<meta name="theme-color" content="#8a2d07">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="canonical" href="https://mucam.bzh/ressources.html">
+<meta name="description" content="Les lieux, associations et ressources documentaires du patrimoine sur la presqu'île de Crozon et à Camaret-sur-Mer.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+.rubrique{margin-top:2rem}
+.rubrique > h2{margin-bottom:.4rem}
+.rubrique > .chapo{color:#444;margin:0 0 1rem}
+.res-list{list-style:none;padding:0;margin:0}
+.res-list li{padding:.55rem 0;border-bottom:1px solid #f0f0f0}
+.res-list li:last-child{border-bottom:0}
+.res-list .nom{font-weight:700}
+.res-list .lieu{color:#666;font-size:.92rem}
+.res-list .desc{display:block;color:#444;font-size:.95rem}
+.avert{border-left:3px solid var(--brand);padding:.2rem 0 .2rem 1rem;margin:1.5rem 0;color:#444}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav aria-label="Navigation principale">
+      <a class="home" href="/" aria-label="Accueil">
+        <img src="/assets/img/head_mucam.png" alt="MuCam">
+      </a>
+      <div class="navlinks">
+        <a href="/projet.html">Le projet</a>
+        <a href="/quai-kleber.html">15–16 quai Kléber</a>
+        <a href="/ressources.html" aria-current="page">Ressources</a>
+        <a href="/participer.html">Participer</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!--
+  ============================================================
+  COMMENT AJOUTER UNE RESSOURCE
+  Copier une ligne <li> et remplacer :
+    <li>
+      <a class="nom" href="URL">Nom de la ressource</a>
+      <span class="lieu">Commune</span>
+      <span class="desc">Une ligne de description factuelle.</span>
+    </li>
+  Sans lien, remplacer <a class="nom" href="..."> par <span class="nom">.
+  Les liens sont volontairement laissés à compléter : aucune URL
+  n'a été ajoutée sans vérification.
+  ============================================================
+-->
+
+<main class="section">
+  <div class="container">
+    <h1>Ressources de la presqu'île</h1>
+    <p class="lead">Le MuCam ne se substitue à aucun des lieux, associations et fonds qui font déjà vivre les patrimoines de la presqu'île de Crozon. Cette page les rassemble en un seul endroit, pour que chacun trouve rapidement où aller, qui contacter et où chercher.</p>
+
+
+    <div class="map-wrap">
+      <div id="map" aria-label="Carte OpenStreetMap des lieux patrimoniaux de la presqu'île"></div>
+      <p class="map-legend muted">Données © contributeurs OpenStreetMap. Cliquez sur un point pour l'ouvrir dans OSM.</p>
+    </div>
+
+    <section class="rubrique">
+      <h2>Lieux et sites patrimoniaux</h2>
+      <p class="chapo">Sites visitables et lieux de mémoire sur la presqu'île.</p>
+      <div class="card">
+        <ul class="res-list">
+          <li><span class="nom">Tour Vauban</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Inscrite au patrimoine mondial de l'UNESCO en 2008 au titre du réseau des sites majeurs de Vauban.</span></li>
+          <li><span class="nom">Chapelle Notre-Dame de Rocamadour</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Chapelle de pèlerinage maritime à la pointe du Sillon.</span></li>
+          <li><span class="nom">Alignements de Lagatjar</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Ensemble mégalithique restauré en 1927–1928.</span></li>
+          <li><span class="nom">Cimetière de bateaux</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Épaves échouées sur le Sillon, témoins de l'activité de pêche.</span></li>
+          <li><span class="nom">Salle de Venise</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Bâtiment communal du quai Kléber abritant la collection du patrimoine maritime.</span></li>
+          <li><span class="nom">Musée mémorial international de la bataille de l'Atlantique</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Installé depuis 1990 dans une casemate de la batterie de Kerbonn, à la pointe de Pen-Hir.</span></li>
+          <li><span class="nom">Maison des Minéraux</span> <span class="lieu">Crozon</span><span class="desc">Centre d'interprétation du patrimoine géologique de la presqu'île.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="rubrique">
+      <h2>Associations</h2>
+      <p class="chapo">Associations patrimoniales, maritimes et culturelles du territoire.</p>
+      <div class="card">
+        <ul class="res-list">
+          <li><span class="nom">Eñvor an Dour</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Mémoire et patrimoine local.</span></li>
+          <li><span class="nom">Les Voiles de Camaret</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Rassemblement de vieux gréements et patrimoine navigant.</span></li>
+          <li><span class="nom">Kameled ar Son</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Musique et pratiques culturelles bretonnes.</span></li>
+          <li><span class="nom">Passeurs d'Iroise</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Association créée en 2025 autour du côtre-pilote <em>Pegasus</em>, navigation traditionnelle et transmission.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="rubrique">
+      <h2>Fonds et ressources documentaires</h2>
+      <p class="chapo">Bases de données, archives et fonds consultables en ligne ou sur place.</p>
+      <div class="card">
+        <ul class="res-list">
+          <li><span class="nom">Inventaire du patrimoine culturel — Région Bretagne</span><span class="desc">Dossiers documentaires du port de Camaret, dont IA29004037 (presse et conserverie de sardines, actuellement atelier de mécanique marine, office de tourisme et Salle de Venise), IA29004028 (espace portuaire, sillon de galets), IA29004029 (zone d'activités du Sillon) et IA29004005 (cale de construction « slipway »).</span></li>
+          <li><span class="nom">Bretania</span><span class="desc">Portail des patrimoines de Bretagne, agrégateur de fonds numérisés.</span></li>
+          <li><span class="nom">Dastum</span><span class="desc">Collecte et conservation du patrimoine oral et musical de Bretagne.</span></li>
+          <li><span class="nom">Cinémathèque de Bretagne</span><span class="desc">Films et images d'archives du territoire.</span></li>
+          <li><span class="nom">Archives départementales du Finistère</span> <span class="lieu">Quimper</span><span class="desc">État civil, cadastre ancien, fonds communaux et maritimes.</span></li>
+          <li><span class="nom">Réseau des sites majeurs de Vauban</span><span class="desc">Documentation et coordination des douze sites inscrits à l'UNESCO.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="rubrique">
+      <h2>Institutions et interlocuteurs publics</h2>
+      <p class="chapo">Collectivités et services de l'État compétents en matière de patrimoine.</p>
+      <div class="card">
+        <ul class="res-list">
+          <li><span class="nom">Commune de Camaret-sur-Mer</span><span class="desc">Propriétaire de la Salle de Venise et de plusieurs sites patrimoniaux communaux.</span></li>
+          <li><span class="nom">Communauté de communes Presqu'île de Crozon – Aulne Maritime</span><span class="desc">Compétences culture, tourisme, urbanisme et projet de territoire.</span></li>
+          <li><span class="nom">Département du Finistère</span><span class="desc">Aides aux projets patrimoniaux et culturels.</span></li>
+          <li><span class="nom">Région Bretagne</span><span class="desc">Dispositifs culture, patrimoine et inventaire.</span></li>
+          <li><span class="nom">DRAC Bretagne</span><span class="desc">Direction régionale des affaires culturelles, ministère de la Culture.</span></li>
+          <li><span class="nom">UDAP du Finistère — Architecte des Bâtiments de France</span><span class="desc">Avis sur les travaux en périmètre de protection.</span></li>
+          <li><span class="nom">Parc naturel marin d'Iroise</span><span class="desc">Protection et connaissance du milieu marin de la pointe bretonne.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <p class="avert">Cette page est un point de départ. Si vous animez un lieu, une association ou un fonds documentaire sur la presqu'île et souhaitez y figurer, ou si une information est inexacte, écrivez-nous : <a href="mailto:mucam@postel.bzh?subject=Page%20Ressources">mucam@postel.bzh</a></p>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-grid">
+    <div>
+      <strong>MuCam2028 — Association de préfiguration du Musée des patrimoines à Camaret-sur-Mer</strong><br>
+      Mairie - 1 Pl. d'Estienne d'Orves 29570 Camaret-sur-Mer<br>
+      Contact : <a href="mailto:mucam@postel.bzh">mucam@postel.bzh</a>
+      <p class="muted">Projet associatif et coopératif au service du territoire. © 2026 MuCam2028.</p>
+    </div>
+    <div>
+      <p class="muted">Prototype public. Les contenus évolueront avec la concertation locale.</p>
+    </div>
+  </div>
+</footer>
+<script>
+/* ------------------------------------------------------------------
+   LIEUX AFFICHÉS SUR LA CARTE
+   Coordonnées vérifiées : Wikidata / base Mérimée / site officiel.
+   Pour ajouter un lieu : ouvrir openstreetmap.org, clic droit sur le
+   point > "Afficher l'adresse", puis recopier lat et lon ci-dessous.
+   ------------------------------------------------------------------ */
+const LIEUX = [
+  { nom: "Salle de Venise",                        lat: 48.275235, lon: -4.594136, note: "15\u201316 quai Kl\u00e9ber, Camaret-sur-Mer" },
+  { nom: "Tour Vauban",                            lat: 48.280028, lon: -4.591667, note: "Le Sillon, Camaret-sur-Mer \u2014 UNESCO 2008" },
+  { nom: "Chapelle Notre-Dame de Rocamadour",      lat: 48.280606, lon: -4.592886, note: "Le Sillon, Camaret-sur-Mer" },
+  { nom: "Alignements de Lagatjar",                lat: 48.273333, lon: -4.609444, note: "Rue Saint-Pol-Roux, Camaret-sur-Mer" },
+  { nom: "Maison des Min\u00e9raux",                    lat: 48.203997, lon: -4.527762, note: "Saint-Hernot, Crozon" }
+  /* À COMPLÉTER — coordonnées non vérifiées, à relever sur OSM :
+  ,{ nom: "Musée mémorial de la bataille de l'Atlantique", lat: ?, lon: ?, note: "Batterie de Kerbonn, pointe de Pen-Hir" }
+  ,{ nom: "Cimetière de bateaux",                          lat: ?, lon: ?, note: "Le Sillon, Camaret-sur-Mer" }
+  */
+];
+
+document.addEventListener('DOMContentLoaded', function(){
+  const el = document.getElementById('map');
+  if (!el || typeof L === 'undefined') return;
+
+  const map = L.map('map', { scrollWheelZoom: false });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+  }).addTo(map);
+
+  const pts = [];
+  LIEUX.forEach(function(l){
+    if (typeof l.lat !== 'number' || typeof l.lon !== 'number') return;
+    const m = L.circleMarker([l.lat, l.lon], {
+      radius: 9, color: '#8a2d07', weight: 3,
+      fillColor: '#8a2d07', fillOpacity: 0.6
+    }).addTo(map);
+    const osm = 'https://www.openstreetmap.org/?mlat=' + l.lat + '&mlon=' + l.lon + '#map=18/' + l.lat + '/' + l.lon;
+    m.bindPopup('<strong>' + l.nom + '</strong>' +
+                (l.note ? '<br>' + l.note : '') +
+                '<br><a href="' + osm + '" target="_blank" rel="noopener">Voir sur OpenStreetMap</a>');
+    pts.push([l.lat, l.lon]);
+  });
+
+  if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.25));
+  else map.setView([48.2767, -4.5956], 13);
+
+  map.once('focus', function(){ map.scrollWheelZoom.enable(); });
+});
+</script>
+</body>
+</html>
