@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MuCam — Les ressources du projet</title>
+<link rel="preload" href="/assets/fonts/Brito-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/Brito-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<meta name="theme-color" content="#8a2d07">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="canonical" href="https://mucam.bzh/ressources.html">
+<meta name="description" content="Les lieux, associations et fonds documentaires qui font vivre les patrimoines de la presqu'île de Crozon.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+.rubrique{margin-top:2rem}
+.rubrique > h2{margin-bottom:.4rem}
+.rubrique > .chapo{color:#444;margin:0 0 1rem}
+.res-list{list-style:none;padding:0;margin:0}
+.res-list li{padding:.55rem 0;border-bottom:1px solid #f0f0f0}
+.res-list li:last-child{border-bottom:0}
+.res-list .nom{font-weight:700}
+a.nom{color:var(--brand);text-decoration:none}
+a.nom:hover,a.nom:focus-visible{text-decoration:underline}
+.res-list .auteur{color:#666;font-size:.92rem}
+.filtres-wrap{margin:1.2rem 0 .4rem}
+.filtres-titre{font-size:.95rem;color:#444;margin:0 0 .5rem}
+.filtres{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+.filtre{font:inherit;font-size:.9rem;line-height:1.2;cursor:pointer;padding:.4rem .8rem;
+  border-radius:999px;border:1px solid #d0d7de;background:#fff;color:#333;transition:.12s}
+.filtre:hover{border-color:var(--brand);color:var(--brand)}
+.filtre[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+.filtre-reset{border-style:dashed;color:#666}
+.filtre-reset[hidden]{display:none}
+.compteur{font-size:.9rem;color:#666;margin:.6rem 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem}
+.tag{font-size:.76rem;line-height:1.5;padding:.1rem .55rem;border-radius:999px;
+  background:#f2f2f7;color:#5a5a5a;white-space:nowrap}
+.tag.actif{background:var(--brand);color:#fff}
+.res-list li[hidden],.rubrique[hidden]{display:none}
+@media (max-width:600px){
+  .filtre{font-size:.84rem;padding:.32rem .62rem}
+  .filtres{gap:.32rem}
+}
+.osm-ligne{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.7rem 0 0;font-size:.92rem;color:#444}
+.osm-ligne input{width:1rem;height:1rem;accent-color:var(--brand)}
+.osm-etat{color:#666;font-size:.88rem}
+.legende{display:flex;flex-wrap:wrap;gap:1rem;margin:.5rem 0 0;font-size:.88rem;color:#666}
+.legende span{display:inline-flex;align-items:center;gap:.4rem}
+.pastille{width:.75rem;height:.75rem;border-radius:50%;display:inline-block}
+.pastille.liste{background:#8a2d07;border:2px solid #8a2d07}
+.pastille.osm{background:#c9a227;border:2px solid #8a7418;width:.6rem;height:.6rem}
+.res-list .lieu{color:#666;font-size:.92rem}
+.res-list .desc{display:block;color:#444;font-size:.95rem}
+.avert{border-left:3px solid var(--brand);padding:.2rem 0 .2rem 1rem;margin:1.5rem 0;color:#444}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav aria-label="Navigation principale">
+      <a class="home" href="/" aria-label="Accueil">
+        <img src="/assets/img/head_mucam.png" alt="MuCam">
+      </a>
+      <div class="navlinks">
+        <a href="/projet.html">Le projet</a>
+        <a href="/quai-kleber.html">15–16 quai Kléber</a>
+        <a href="/ressources.html" aria-current="page">Ressources</a>
+        <a href="/participer.html">Participer</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <h1>Les ressources du projet</h1>
+    <p class="lead">Le MuCam ne remplace rien de ce qui existe. Il ambitionne au contraire de rediriger ses visiteurs vers l'existant : les lieux, les associations et les fonds qui font déjà vivre les patrimoines de la presqu'île de Crozon. Cette page les rassemble au même endroit, et attend vos contributions !</p>
+
+
+    <div class="filtres-wrap">
+      <p class="filtres-titre">Filtrer par type de patrimoine. Cliquez à nouveau pour désélectionner.</p>
+      <div class="filtres" role="group" aria-label="Filtrer par type de patrimoine">
+        <button type="button" class="filtre" data-tag="maritime" aria-pressed="false">Maritime</button>
+        <button type="button" class="filtre" data-tag="militaire" aria-pressed="false">Militaire</button>
+        <button type="button" class="filtre" data-tag="sacre" aria-pressed="false">Sacré et religieux</button>
+        <button type="button" class="filtre" data-tag="naturel" aria-pressed="false">Naturel</button>
+        <button type="button" class="filtre" data-tag="immateriel" aria-pressed="false">Immatériel</button>
+        <button type="button" class="filtre" data-tag="vernaculaire" aria-pressed="false">Vernaculaire</button>
+        <button type="button" class="filtre" data-tag="artistique" aria-pressed="false">Artistique</button>
+        <button type="button" class="filtre" data-tag="architectural" aria-pressed="false">Architectural</button>
+        <button type="button" class="filtre" data-tag="industriel" aria-pressed="false">Industriel</button>
+        <button type="button" class="filtre" data-tag="archeologique" aria-pressed="false">Archéologique</button>
+        <button type="button" class="filtre filtre-reset" id="reset" hidden>Tout afficher</button>
+      </div>
+      <p class="compteur" id="compteur" role="status" aria-live="polite"></p>
+      <p class="osm-ligne">
+        <input type="checkbox" id="osm" checked>
+        <label for="osm">Afficher aussi tous les sites patrimoniaux recensés sur OpenStreetMap</label>
+        <span class="osm-etat" id="osm-etat"></span>
+      </p>
+    </div>
+
+    <div class="map-wrap">
+      <div id="map" aria-label="Carte OpenStreetMap des lieux patrimoniaux de la presqu'île"></div>
+      <p class="legende">
+        <span><i class="pastille liste"></i> Ressources listées ci-dessous</span>
+        <span><i class="pastille osm"></i> Autres sites recensés sur OpenStreetMap</span>
+      </p>
+      <p class="map-legend muted">Données © contributeurs OpenStreetMap. Cliquez sur un point pour l'ouvrir dans OSM.</p>
+    </div>
+
+    <section class="rubrique">
+      <h2>Lieux et sites patrimoniaux</h2>
+      <p class="chapo">Sites visitables et lieux de mémoire sur la presqu'île.</p>
+      <div class="card">
+        <ul class="res-list">
+          <li data-tags="architectural militaire" data-lat="48.280028" data-lon="-4.591667"><a class="nom" href="https://www.crozon-tourisme.bzh/activite/tour-vauban/" target="_blank" rel="noopener">Tour Vauban</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Inscrite au patrimoine mondial de l'UNESCO en 2008 au titre du réseau des sites majeurs de Vauban.</span>
+            <span class="tags"><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="militaire">Militaire</span></span></li>
+          <li data-tags="sacre maritime architectural" data-lat="48.280606" data-lon="-4.592886"><a class="nom" href="https://fr.wikipedia.org/wiki/Chapelle_Notre-Dame-de-Rocamadour_de_Camaret-sur-Mer" target="_blank" rel="noopener">Chapelle Notre-Dame de Rocamadour</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Lieu de pèlerinage maritime, à la pointe du Sillon.</span>
+            <span class="tags"><span class="tag" data-tag="sacre">Sacré et religieux</span><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="architectural">Architectural</span></span></li>
+          <li data-tags="archeologique naturel" data-lat="48.273333" data-lon="-4.609444"><a class="nom" href="https://fr.wikipedia.org/wiki/Alignements_de_Lagatjar" target="_blank" rel="noopener">Alignements de Lagatjar</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Ensemble mégalithique remarquable, restauré en 1927–1928.</span>
+            <span class="tags"><span class="tag" data-tag="archeologique">Archéologique</span><span class="tag" data-tag="naturel">Naturel</span></span></li>
+          <li data-tags="maritime vernaculaire"><span class="nom">Cimetière de bateaux</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Épaves échouées sur le Sillon, témoins d'une activité de pêche révolue.</span>
+            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
+          <li data-tags="maritime architectural industriel" data-lat="48.275235" data-lon="-4.594136"><a class="nom" href="https://patrimoine.bzh/gertrude-diffusion/dossier/IA29004037" target="_blank" rel="noopener">Salle de Venise</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Bâtiment communal du quai Kléber abritant la collection du patrimoine maritime.</span>
+            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="industriel">Industriel</span></span></li>
+          <li data-tags="militaire maritime"><a class="nom" href="https://www.crozon-tourisme.bzh/activite/memorial-de-la-bataille-de-latlantique/" target="_blank" rel="noopener">Musée mémorial international de la bataille de l'Atlantique</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Installé depuis 1990 dans une casemate de la batterie de Kerbonn, à la pointe de Pen-Hir.</span>
+            <span class="tags"><span class="tag" data-tag="militaire">Militaire</span><span class="tag" data-tag="maritime">Maritime</span></span></li>
+          <li data-tags="naturel" data-lat="48.203997" data-lon="-4.527762"><a class="nom" href="https://www.maison-des-mineraux.org/" target="_blank" rel="noopener">Maison des Minéraux</a> <span class="lieu">Crozon</span><span class="desc">Centre d'interprétation du patrimoine géologique de la presqu'île.</span>
+            <span class="tags"><span class="tag" data-tag="naturel">Naturel</span></span></li>
+          <li data-tags="sacre architectural archeologique"><a class="nom" href="https://www.musee-abbaye-landevennec.fr/" target="_blank" rel="noopener">Musée de l'ancienne abbaye de Landévennec</a> <span class="lieu">Landévennec</span><span class="desc">Site archéologique, musée et jardin médiéval autour de la plus ancienne fondation monastique de Bretagne, géré par l'association Abati Landevenneg.</span>
+            <span class="tags"><span class="tag" data-tag="sacre">Sacré et religieux</span><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="archeologique">Archéologique</span></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="rubrique">
+      <h2>Associations</h2>
+      <p class="chapo">Associations patrimoniales, maritimes et culturelles de notre presqu'île.</p>
+      <div class="card">
+        <ul class="res-list">
+          <li data-tags="immateriel vernaculaire"><span class="nom">Eñvor an Dour</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Groupe d'habitants passionnés par les traces de la vie quotidienne camarétoise. L'association s'est spécialisée dans l'identification, l'entretien et la restauration des lavoirs du territoire.</span>
+            <span class="tags"><span class="tag" data-tag="immateriel">Immatériel</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
+          <li data-tags="maritime immateriel"><a class="nom" href="https://voiles-de-camaret.com/" target="_blank" rel="noopener">Les Voiles de Camaret</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Fête maritime du port de Camaret : rassemblement de vieux gréements, valorisation du patrimoine vivant et navigant.</span>
+            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="immateriel">Immatériel</span></span></li>
+          <li data-tags="immateriel artistique"><a class="nom" href="https://www.kameledarson.com/" target="_blank" rel="noopener">Kameled ar Son</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Transmission et pratique des chants et musiques bretonnes.</span>
+            <span class="tags"><span class="tag" data-tag="immateriel">Immatériel</span><span class="tag" data-tag="artistique">Artistique</span></span></li>
+          <li data-tags="maritime immateriel"><span class="nom">Passeurs d'Iroise</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Association créée en 2025 autour du côtre-pilote <em>Pegasus</em> : navigation traditionnelle, transmission et remobilisation.</span>
+            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="immateriel">Immatériel</span></span></li>
+          <li data-tags="artistique architectural"><a class="nom" href="https://saspr.hypotheses.org/" target="_blank" rel="noopener">Société des Amis de Saint-Pol-Roux</a><span class="desc">Elle fait connaître l'œuvre du poète installé à Camaret et publie un bulletin annuel. C'est elle qui a lancé en 2019 la pétition pour la sauvegarde des ruines du manoir de Cœcilian.</span>
+            <span class="tags"><span class="tag" data-tag="artistique">Artistique</span><span class="tag" data-tag="architectural">Architectural</span></span></li>
+          <li data-tags="artistique maritime"><a class="nom" href="https://www.jimsevellec.org/" target="_blank" rel="noopener">Société des Amis de Jim-E. Sévellec</a><span class="desc">Fondée en 2024 par le fils de l'artiste, elle rassemble le catalogue de l'œuvre du peintre et céramiste né à Camaret en 1897.</span>
+            <span class="tags"><span class="tag" data-tag="artistique">Artistique</span><span class="tag" data-tag="maritime">Maritime</span></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="rubrique">
+      <h2>Documentation locale</h2>
+      <p class="chapo">Travaux de recherche et de publication menés depuis la presqu'île.</p>
+      <div class="card">
+        <ul class="res-list">
+          <li data-tags="maritime industriel vernaculaire"><a class="nom" href="https://www.bateaux-de-camaret.com/" target="_blank" rel="noopener">Bateaux de Camaret</a><span class="desc">Le travail de Michel Torillec sur les bateaux et les chantiers de Camaret.</span>
+            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="industriel">Industriel</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
+          <li data-tags="immateriel vernaculaire"><a class="nom" href="https://www.notrepresquile.com/" target="_blank" rel="noopener">Notre presqu'île</a><span class="desc">Le site de Brigitte Charoy, journaliste et autrice, sur la vie et l'histoire de la presqu'île.</span>
+            <span class="tags"><span class="tag" data-tag="immateriel">Immatériel</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="rubrique">
+      <h2>Fonds documentaires</h2>
+      <p class="chapo">Bases de données, archives et fonds consultables en ligne ou sur place.</p>
+      <div class="card">
+        <ul class="res-list">
+          <li data-tags="architectural maritime vernaculaire industriel"><a class="nom" href="https://patrimoine.bzh/" target="_blank" rel="noopener">L'inventaire du patrimoine culturel — Région Bretagne</a><span class="desc">Dossiers documentaires du port de Camaret, dont IA29004037 (presse et conserverie de sardines, actuellement atelier de mécanique marine, office de tourisme et Salle de Venise), IA29004028 (espace portuaire, sillon de galets), IA29004029 (zone d'activités du Sillon) et IA29004005 (cale de construction « slipway »).</span>
+            <span class="tags"><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span><span class="tag" data-tag="industriel">Industriel</span></span></li>
+          <li data-tags="immateriel artistique"><a class="nom" href="https://www.bretania.bzh/" target="_blank" rel="noopener">Le portail Bretania</a><span class="desc">Agrégateur de fonds patrimoniaux numérisés.</span>
+            <span class="tags"><span class="tag" data-tag="immateriel">Immatériel</span><span class="tag" data-tag="artistique">Artistique</span></span></li>
+          <li data-tags="immateriel"><a class="nom" href="https://www.dastum.bzh/" target="_blank" rel="noopener">Dastum</a><span class="desc">Collecte et conservation du patrimoine oral et musical de Bretagne.</span>
+            <span class="tags"><span class="tag" data-tag="immateriel">Immatériel</span></span></li>
+          <li data-tags="immateriel artistique"><a class="nom" href="https://www.cinematheque-bretagne.bzh/" target="_blank" rel="noopener">La Cinémathèque de Bretagne</a><span class="desc">Films et images d'archives de la région, dont ceux de la presqu'île.</span>
+            <span class="tags"><span class="tag" data-tag="immateriel">Immatériel</span><span class="tag" data-tag="artistique">Artistique</span></span></li>
+          <li data-tags="vernaculaire maritime"><a class="nom" href="https://archives.finistere.fr/" target="_blank" rel="noopener">Les archives départementales du Finistère</a> <span class="lieu">Quimper</span>
+            <span class="tags"><span class="tag" data-tag="vernaculaire">Vernaculaire</span><span class="tag" data-tag="maritime">Maritime</span></span></li>
+          <li data-tags="militaire architectural"><span class="nom">Le réseau des sites majeurs de Vauban</span><span class="desc">Documentation et coordination des douze sites inscrits à l'UNESCO, dont la tour Vauban de Camaret.</span>
+            <span class="tags"><span class="tag" data-tag="militaire">Militaire</span><span class="tag" data-tag="architectural">Architectural</span></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <p class="avert">Comme le projet du MuCam, cette page est ouverte aux contributions ! Vous animez un lieu, une association ou un fonds documentaire sur la presqu'île et souhaitez y figurer ? Vous avez repéré une information inexacte ? Écrivez-nous : <a href="mailto:mucam@postel.bzh?subject=Page%20Ressources">mucam@postel.bzh</a></p>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-grid">
+    <div>
+      <strong>Association de préfiguration du MuCam — Musée des patrimoines de la Presqu'île de Crozon à Camaret-sur-Mer</strong><br>
+      Mairie - 1 Pl. d'Estienne d'Orves 29570 Camaret-sur-Mer<br>
+      Contact : <a href="mailto:mucam@postel.bzh">mucam@postel.bzh</a>
+      <p class="muted">Projet associatif et coopératif au service du territoire. © 2026 MuCam2028.</p>
+    </div>
+    <div>
+      <p class="muted">Prototype public. Les contenus évolueront avec la concertation locale.</p>
+    </div>
+  </div>
+</footer>
+<script>
+/* ------------------------------------------------------------------
+   AJOUTER UNE RESSOURCE
+     data-tags   types de patrimoine, séparés par une espace. Valeurs :
+                 maritime militaire sacre naturel immateriel
+                 vernaculaire artistique architectural industriel
+                 archeologique
+     data-lat / data-lon  coordonnées, pour placer le point rouge sur
+                 la carte. Les relever sur openstreetmap.org : clic
+                 droit sur le lieu > Afficher l'adresse. Sans ces deux
+                 attributs, l'entrée reste dans la liste mais n'a pas
+                 de point rouge.
+   Les pastilles <span class="tag"> doivent reprendre exactement les
+   mêmes valeurs que data-tags.
+
+   La couche jaune est chargée depuis OpenStreetMap et n'a pas à être
+   tenue à jour ici : elle suit ce que les contributeurs OSM cartographient
+   sur la presqu'île.
+   ------------------------------------------------------------------ */
+document.addEventListener('DOMContentLoaded', function(){
+  var BBOX = [48.14, -4.66, 48.37, -4.18];   // presqu'île de Crozon
+  var actifs   = new Set();
+  var entrees  = Array.prototype.slice.call(document.querySelectorAll('.res-list li'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.rubrique'));
+  var boutons  = Array.prototype.slice.call(document.querySelectorAll('.filtre[data-tag]'));
+  var reset    = document.getElementById('reset');
+  var compteur = document.getElementById('compteur');
+  var caseOsm  = document.getElementById('osm');
+  var etatOsm  = document.getElementById('osm-etat');
+  var sitesOsm = null;
+
+  /* ---------- carte ---------- */
+  var map = null, coucheListe = null, coucheOsm = null;
+  var mapEl = document.getElementById('map');
+  if (mapEl && typeof L !== 'undefined') {
+    map = L.map('map', { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+    }).addTo(map);
+    coucheOsm   = L.layerGroup().addTo(map);
+    coucheListe = L.layerGroup().addTo(map);
+    map.fitBounds([[BBOX[0],BBOX[1]],[BBOX[2],BBOX[3]]]);
+    map.once('focus', function(){ map.scrollWheelZoom.enable(); });
+  }
+
+  function lienOsm(lat, lon){
+    return 'https://www.openstreetmap.org/?mlat=' + lat + '&mlon=' + lon +
+           '#map=17/' + lat + '/' + lon;
+  }
+
+  /* ---------- correspondance étiquettes OSM -> catégories du site ---------- */
+  function categories(t){
+    var c = {}, h = t.historic || '', mm = t.man_made || '';
+    if (['fort','bunker','battery','castle','citywalls','city_gate'].indexOf(h) > -1 || t.military) c.militaire = 1;
+    if (['archaeological_site','megalith','menhir','dolmen','tomb','tumulus','standing_stone'].indexOf(h) > -1) c.archeologique = 1;
+    if (t.amenity === 'place_of_worship' || ['chapel','church','monastery','wayside_cross','wayside_shrine'].indexOf(h) > -1) c.sacre = 1;
+    if (mm === 'lighthouse' || ['ship','wreck'].indexOf(h) > -1 || t['seamark:type']) c.maritime = 1;
+    if (['manor','house','farm','mansion','aqueduct','bridge','building'].indexOf(h) > -1) c.architectural = 1;
+    if (['mine','mine_shaft','windmill','watermill'].indexOf(h) > -1 || ['works','windmill','watermill'].indexOf(mm) > -1) c.industriel = 1;
+    return Object.keys(c);
+  }
+
+  function typeLisible(t){
+    if (t.tourism === 'museum') return 'Musée';
+    if (t.man_made === 'lighthouse') return 'Phare';
+    if (t.amenity === 'place_of_worship') return 'Lieu de culte';
+    var noms = { fort:'Fort', bunker:'Blockhaus', battery:'Batterie', castle:'Château',
+      archaeological_site:'Site archéologique', megalith:'Mégalithe', menhir:'Menhir',
+      dolmen:'Dolmen', tomb:'Sépulture', tumulus:'Tumulus', memorial:'Mémorial',
+      monument:'Monument', ruins:'Ruines', chapel:'Chapelle', church:'Église',
+      manor:'Manoir', wreck:'Épave', ship:'Navire', windmill:'Moulin à vent',
+      watermill:'Moulin à eau', wayside_cross:'Calvaire' };
+    return noms[t.historic] || 'Site patrimonial';
+  }
+
+  /* ---------- interrogation d'OpenStreetMap ---------- */
+  function requete(){
+    var b = BBOX.join(',');
+    return '[out:json][timeout:45];(' +
+      'nwr["historic"]["name"](' + b + ');' +
+      'nwr["tourism"="museum"]["name"](' + b + ');' +
+      'nwr["man_made"="lighthouse"]["name"](' + b + ');' +
+      'nwr["amenity"="place_of_worship"]["name"](' + b + ');' +
+      ');out center tags;';
+  }
+
+  function chargerOsm(){
+    if (sitesOsm) return Promise.resolve(sitesOsm);
+    try {
+      var cache = sessionStorage.getItem('mucam-osm');
+      if (cache) { sitesOsm = JSON.parse(cache); return Promise.resolve(sitesOsm); }
+    } catch(e) {}
+
+    etatOsm.textContent = 'chargement…';
+    var serveurs = ['https://overpass.kumi.systems/api/interpreter',
+                    'https://overpass-api.de/api/interpreter'];
+
+    function tenter(i){
+      if (i >= serveurs.length) return Promise.reject(new Error('Overpass indisponible'));
+      return fetch(serveurs[i] + '?data=' + encodeURIComponent(requete()))
+        .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .catch(function(){ return tenter(i + 1); });
+    }
+
+    return tenter(0).then(function(data){
+      var vus = {};
+      sitesOsm = (data.elements || []).map(function(el){
+        var lat = el.lat != null ? el.lat : (el.center && el.center.lat);
+        var lon = el.lon != null ? el.lon : (el.center && el.center.lon);
+        if (lat == null || lon == null) return null;
+        var t = el.tags || {};
+        var cle = t.name + '|' + lat.toFixed(4) + '|' + lon.toFixed(4);
+        if (vus[cle]) return null;
+        vus[cle] = 1;
+        return { nom: t.name, lat: lat, lon: lon, type: typeLisible(t),
+                 tags: categories(t), id: el.type + '/' + el.id };
+      }).filter(Boolean);
+      try { sessionStorage.setItem('mucam-osm', JSON.stringify(sitesOsm)); } catch(e) {}
+      return sitesOsm;
+    });
+  }
+
+  /* ---------- dessin ---------- */
+  function dessiner(){
+    if (!map) return;
+    var pts = [];
+
+    coucheListe.clearLayers();
+    entrees.forEach(function(li){
+      if (li.hidden) return;
+      var lat = parseFloat(li.dataset.lat), lon = parseFloat(li.dataset.lon);
+      if (isNaN(lat) || isNaN(lon)) return;
+      var nom = li.querySelector('.nom').textContent;
+      var lieu = li.querySelector('.lieu');
+      L.circleMarker([lat, lon], { radius: 9, color: '#8a2d07', weight: 3,
+        fillColor: '#8a2d07', fillOpacity: 0.65 })
+       .bindPopup('<strong>' + nom + '</strong>' + (lieu ? '<br>' + lieu.textContent : '') +
+                  '<br><a href="' + lienOsm(lat, lon) + '" target="_blank" rel="noopener">Voir sur OpenStreetMap</a>')
+       .addTo(coucheListe);
+      pts.push([lat, lon]);
+    });
+
+    coucheOsm.clearLayers();
+    if (caseOsm.checked && sitesOsm) {
+      var n = 0;
+      sitesOsm.forEach(function(s){
+        if (actifs.size > 0 && !s.tags.some(function(t){ return actifs.has(t); })) return;
+        L.circleMarker([s.lat, s.lon], { radius: 5, color: '#8a7418', weight: 1.5,
+          fillColor: '#c9a227', fillOpacity: 0.75 })
+         .bindPopup('<strong>' + s.nom + '</strong><br>' + s.type +
+                    '<br><a href="https://www.openstreetmap.org/' + s.id +
+                    '" target="_blank" rel="noopener">Voir sur OpenStreetMap</a>')
+         .addTo(coucheOsm);
+        pts.push([s.lat, s.lon]);
+        n++;
+      });
+      etatOsm.textContent = n + (n > 1 ? ' sites chargés' : ' site chargé');
+    } else if (caseOsm.checked) {
+      etatOsm.textContent = '';
+    } else {
+      etatOsm.textContent = '';
+    }
+
+    if (pts.length > 1)       map.fitBounds(L.latLngBounds(pts).pad(0.15));
+    else if (pts.length === 1) map.setView(pts[0], 15);
+    else                       map.fitBounds([[BBOX[0],BBOX[1]],[BBOX[2],BBOX[3]]]);
+  }
+
+  /* ---------- filtrage ---------- */
+  function appliquer(){
+    var visibles = 0;
+    entrees.forEach(function(li){
+      var tags = (li.dataset.tags || '').split(' ').filter(Boolean);
+      var ok = actifs.size === 0 || tags.some(function(t){ return actifs.has(t); });
+      li.hidden = !ok;
+      if (ok) visibles++;
+      li.querySelectorAll('.tag').forEach(function(el){
+        el.classList.toggle('actif', actifs.has(el.dataset.tag));
+      });
+    });
+    sections.forEach(function(sec){
+      sec.hidden = sec.querySelectorAll('.res-list li:not([hidden])').length === 0;
+    });
+    reset.hidden = actifs.size === 0;
+    compteur.textContent = actifs.size === 0 ? ''
+      : visibles + (visibles > 1 ? ' ressources affichées' : ' ressource affichée') +
+        ' sur ' + entrees.length + '.';
+    dessiner();
+  }
+
+  boutons.forEach(function(b){
+    b.addEventListener('click', function(){
+      var t = b.dataset.tag;
+      if (actifs.has(t)) actifs.delete(t); else actifs.add(t);
+      b.setAttribute('aria-pressed', actifs.has(t) ? 'true' : 'false');
+      appliquer();
+    });
+  });
+  reset.addEventListener('click', function(){
+    actifs.clear();
+    boutons.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+    appliquer();
+  });
+  caseOsm.addEventListener('change', function(){
+    if (caseOsm.checked && !sitesOsm) {
+      chargerOsm().then(appliquer).catch(function(){
+        etatOsm.textContent = 'OpenStreetMap momentanément indisponible';
+      });
+    } else {
+      appliquer();
+    }
+  });
+
+  appliquer();
+  if (caseOsm.checked) {
+    chargerOsm().then(appliquer).catch(function(){
+      etatOsm.textContent = 'OpenStreetMap momentanément indisponible';
+    });
+  }
+});
+</script>
+</body>
+</html>
