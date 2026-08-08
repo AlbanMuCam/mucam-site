@@ -43,6 +43,10 @@ a.nom:hover,a.nom:focus-visible{text-decoration:underline}
   background:#f2f2f7;color:#5a5a5a;white-space:nowrap}
 .tag.actif{background:var(--brand);color:#fff}
 .res-list li[hidden],.rubrique[hidden]{display:none}
+@media (max-width:600px){
+  .filtre{font-size:.84rem;padding:.32rem .62rem}
+  .filtres{gap:.32rem}
+}
 .res-list .lieu{color:#666;font-size:.92rem}
 .res-list .desc{display:block;color:#444;font-size:.95rem}
 .avert{border-left:3px solid var(--brand);padding:.2rem 0 .2rem 1rem;margin:1.5rem 0;color:#444}
@@ -82,6 +86,8 @@ a.nom:hover,a.nom:focus-visible{text-decoration:underline}
         <button type="button" class="filtre" data-tag="vernaculaire" aria-pressed="false">Vernaculaire</button>
         <button type="button" class="filtre" data-tag="artistique" aria-pressed="false">Artistique</button>
         <button type="button" class="filtre" data-tag="architectural" aria-pressed="false">Architectural</button>
+        <button type="button" class="filtre" data-tag="industriel" aria-pressed="false">Industriel</button>
+        <button type="button" class="filtre" data-tag="archeologique" aria-pressed="false">Archéologique</button>
         <button type="button" class="filtre filtre-reset" id="reset" hidden>Tout afficher</button>
       </div>
       <p class="compteur" id="compteur" role="status" aria-live="polite"></p>
@@ -101,18 +107,18 @@ a.nom:hover,a.nom:focus-visible{text-decoration:underline}
             <span class="tags"><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="militaire">Militaire</span></span></li>
           <li data-tags="sacre maritime architectural" data-lat="48.280606" data-lon="-4.592886"><a class="nom" href="https://fr.wikipedia.org/wiki/Chapelle_Notre-Dame-de-Rocamadour_de_Camaret-sur-Mer" target="_blank" rel="noopener">Chapelle Notre-Dame de Rocamadour</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Lieu de pèlerinage maritime, à la pointe du Sillon.</span>
             <span class="tags"><span class="tag" data-tag="sacre">Sacré et religieux</span><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="architectural">Architectural</span></span></li>
-          <li data-tags="architectural naturel" data-lat="48.273333" data-lon="-4.609444"><a class="nom" href="https://fr.wikipedia.org/wiki/Alignements_de_Lagatjar" target="_blank" rel="noopener">Alignements de Lagatjar</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Ensemble mégalithique remarquable, restauré en 1927–1928.</span>
-            <span class="tags"><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="naturel">Naturel</span></span></li>
+          <li data-tags="archeologique naturel" data-lat="48.273333" data-lon="-4.609444"><a class="nom" href="https://fr.wikipedia.org/wiki/Alignements_de_Lagatjar" target="_blank" rel="noopener">Alignements de Lagatjar</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Ensemble mégalithique remarquable, restauré en 1927–1928.</span>
+            <span class="tags"><span class="tag" data-tag="archeologique">Archéologique</span><span class="tag" data-tag="naturel">Naturel</span></span></li>
           <li data-tags="maritime vernaculaire"><span class="nom">Cimetière de bateaux</span> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Épaves échouées sur le Sillon, témoins d'une activité de pêche révolue.</span>
             <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
-          <li data-tags="maritime architectural" data-lat="48.275235" data-lon="-4.594136"><a class="nom" href="https://patrimoine.bzh/gertrude-diffusion/dossier/IA29004037" target="_blank" rel="noopener">Salle de Venise</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Bâtiment communal du quai Kléber abritant la collection du patrimoine maritime.</span>
-            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="architectural">Architectural</span></span></li>
+          <li data-tags="maritime architectural industriel" data-lat="48.275235" data-lon="-4.594136"><a class="nom" href="https://patrimoine.bzh/gertrude-diffusion/dossier/IA29004037" target="_blank" rel="noopener">Salle de Venise</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Bâtiment communal du quai Kléber abritant la collection du patrimoine maritime.</span>
+            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="industriel">Industriel</span></span></li>
           <li data-tags="militaire maritime"><a class="nom" href="https://www.crozon-tourisme.bzh/activite/memorial-de-la-bataille-de-latlantique/" target="_blank" rel="noopener">Musée mémorial international de la bataille de l'Atlantique</a> <span class="lieu">Camaret-sur-Mer</span><span class="desc">Installé depuis 1990 dans une casemate de la batterie de Kerbonn, à la pointe de Pen-Hir.</span>
             <span class="tags"><span class="tag" data-tag="militaire">Militaire</span><span class="tag" data-tag="maritime">Maritime</span></span></li>
           <li data-tags="naturel" data-lat="48.203997" data-lon="-4.527762"><a class="nom" href="https://www.maison-des-mineraux.org/" target="_blank" rel="noopener">Maison des Minéraux</a> <span class="lieu">Crozon</span><span class="desc">Centre d'interprétation du patrimoine géologique de la presqu'île.</span>
             <span class="tags"><span class="tag" data-tag="naturel">Naturel</span></span></li>
-          <li data-tags="sacre architectural"><a class="nom" href="https://www.musee-abbaye-landevennec.fr/" target="_blank" rel="noopener">Musée de l'ancienne abbaye de Landévennec</a> <span class="lieu">Landévennec</span><span class="desc">Site archéologique, musée et jardin médiéval autour de la plus ancienne fondation monastique de Bretagne, géré par l'association Abati Landevenneg.</span>
-            <span class="tags"><span class="tag" data-tag="sacre">Sacré et religieux</span><span class="tag" data-tag="architectural">Architectural</span></span></li>
+          <li data-tags="sacre architectural archeologique"><a class="nom" href="https://www.musee-abbaye-landevennec.fr/" target="_blank" rel="noopener">Musée de l'ancienne abbaye de Landévennec</a> <span class="lieu">Landévennec</span><span class="desc">Site archéologique, musée et jardin médiéval autour de la plus ancienne fondation monastique de Bretagne, géré par l'association Abati Landevenneg.</span>
+            <span class="tags"><span class="tag" data-tag="sacre">Sacré et religieux</span><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="archeologique">Archéologique</span></span></li>
         </ul>
       </div>
     </section>
@@ -143,8 +149,8 @@ a.nom:hover,a.nom:focus-visible{text-decoration:underline}
       <p class="chapo">Travaux de recherche et de publication menés depuis la presqu'île.</p>
       <div class="card">
         <ul class="res-list">
-          <li data-tags="maritime vernaculaire"><a class="nom" href="https://www.bateaux-de-camaret.com/" target="_blank" rel="noopener">Bateaux de Camaret</a><span class="desc">Le travail de Michel Torillec sur les bateaux et les chantiers de Camaret.</span>
-            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
+          <li data-tags="maritime industriel vernaculaire"><a class="nom" href="https://www.bateaux-de-camaret.com/" target="_blank" rel="noopener">Bateaux de Camaret</a><span class="desc">Le travail de Michel Torillec sur les bateaux et les chantiers de Camaret.</span>
+            <span class="tags"><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="industriel">Industriel</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
           <li data-tags="immateriel vernaculaire"><a class="nom" href="https://www.notrepresquile.com/" target="_blank" rel="noopener">Notre presqu'île</a><span class="desc">Le site de Brigitte Charoy, journaliste et autrice, sur la vie et l'histoire de la presqu'île.</span>
             <span class="tags"><span class="tag" data-tag="immateriel">Immatériel</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
         </ul>
@@ -156,8 +162,8 @@ a.nom:hover,a.nom:focus-visible{text-decoration:underline}
       <p class="chapo">Bases de données, archives et fonds consultables en ligne ou sur place.</p>
       <div class="card">
         <ul class="res-list">
-          <li data-tags="architectural maritime vernaculaire"><a class="nom" href="https://patrimoine.bzh/" target="_blank" rel="noopener">L'inventaire du patrimoine culturel — Région Bretagne</a><span class="desc">Dossiers documentaires du port de Camaret, dont IA29004037 (presse et conserverie de sardines, actuellement atelier de mécanique marine, office de tourisme et Salle de Venise), IA29004028 (espace portuaire, sillon de galets), IA29004029 (zone d'activités du Sillon) et IA29004005 (cale de construction « slipway »).</span>
-            <span class="tags"><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span></span></li>
+          <li data-tags="architectural maritime vernaculaire industriel"><a class="nom" href="https://patrimoine.bzh/" target="_blank" rel="noopener">L'inventaire du patrimoine culturel — Région Bretagne</a><span class="desc">Dossiers documentaires du port de Camaret, dont IA29004037 (presse et conserverie de sardines, actuellement atelier de mécanique marine, office de tourisme et Salle de Venise), IA29004028 (espace portuaire, sillon de galets), IA29004029 (zone d'activités du Sillon) et IA29004005 (cale de construction « slipway »).</span>
+            <span class="tags"><span class="tag" data-tag="architectural">Architectural</span><span class="tag" data-tag="maritime">Maritime</span><span class="tag" data-tag="vernaculaire">Vernaculaire</span><span class="tag" data-tag="industriel">Industriel</span></span></li>
           <li data-tags="immateriel artistique"><a class="nom" href="https://www.bretania.bzh/" target="_blank" rel="noopener">Le portail Bretania</a><span class="desc">Agrégateur de fonds patrimoniaux numérisés.</span>
             <span class="tags"><span class="tag" data-tag="immateriel">Immatériel</span><span class="tag" data-tag="artistique">Artistique</span></span></li>
           <li data-tags="immateriel"><a class="nom" href="https://www.dastum.bzh/" target="_blank" rel="noopener">Dastum</a><span class="desc">Collecte et conservation du patrimoine oral et musical de Bretagne.</span>
@@ -196,6 +202,7 @@ a.nom:hover,a.nom:focus-visible{text-decoration:underline}
      data-tags   types de patrimoine, séparés par une espace. Valeurs
                  possibles : maritime militaire sacre naturel
                  immateriel vernaculaire artistique architectural
+                 industriel archeologique
      data-lat / data-lon  coordonnées, uniquement pour les lieux à
                  placer sur la carte. Les relever sur openstreetmap.org
                  (clic droit sur le point > Afficher l'adresse).
